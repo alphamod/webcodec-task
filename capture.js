@@ -34,8 +34,11 @@ const handleFrame = (frame) => {
   try {
     ctx.drawImage(frame, 0, 0);
     const img = document.createElement("img");
+    const span = document.createElement("span");
+    span.innerText= frameCounter;
     img.src = canvas.toDataURL();
     imgContainer.appendChild(img);
+    imgContainer.appendChild(span)
     frame.close();
   } catch (error) {
     console.log(error);
@@ -91,7 +94,7 @@ const startRecording = async () => {
     videoTrack = stream.getVideoTracks()[0];
     trackProcessor = new MediaStreamTrackProcessor(videoTrack);
     reader = trackProcessor.readable.getReader();
-    while (frameCounter < 20) {
+    while (frameCounter <= 20) {
       const result = await reader.read();
       if (result.done) {
         break;
@@ -117,7 +120,7 @@ const startRecording = async () => {
         console.log("encoder not supported");
       }
     }
-    if (frameCounter == 20) {
+    if (frameCounter > 20) {
       stopRecording();
     }
   } catch (error) {
